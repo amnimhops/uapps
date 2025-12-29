@@ -46,8 +46,12 @@ class Request
         
         // Parse JSON body if content type is JSON
         $contentType = $headers['Content-Type'] ?? '';
-        if (strpos($contentType, 'application/json') !== false) {
-            $bodyParams = json_decode($rawBody, true) ?: [];
+        if (strpos($contentType, 'application/json') !== false && !empty($rawBody)) {
+            $bodyParams = json_decode($rawBody, true);
+            if ($bodyParams === null && json_last_error() !== JSON_ERROR_NONE) {
+                // Log or handle JSON parsing error
+                $bodyParams = [];
+            }
         } else {
             $bodyParams = $_POST;
         }

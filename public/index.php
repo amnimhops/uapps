@@ -6,9 +6,6 @@ declare(strict_types=1);
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-// Set response content type
-header('Content-Type: application/json');
-
 // Load Composer autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
 

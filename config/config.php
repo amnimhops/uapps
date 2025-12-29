@@ -7,7 +7,7 @@ return [
         'name' => 'uapps REST API',
         'version' => '1.0.0',
         'env' => getenv('APP_ENV') ?: 'development',
-        'debug' => getenv('APP_DEBUG') ?: true,
+        'debug' => filter_var(getenv('APP_DEBUG'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
     ],
     
     'cors' => [

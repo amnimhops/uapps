@@ -6,7 +6,7 @@ namespace App\Core;
 
 class Response
 {
-    private $data;
+    private mixed $data;
     private int $statusCode;
     private array $headers;
 
@@ -14,7 +14,7 @@ class Response
     {
         $this->data = $data;
         $this->statusCode = $statusCode;
-        $this->headers = $headers;
+        $this->headers = array_merge(['Content-Type' => 'application/json'], $headers);
     }
 
     public function send(): void
@@ -29,7 +29,14 @@ class Response
         
         // Output data as JSON
         if ($this->data !== null) {
-            echo json_encode($this->data, JSON_PRETTY_PRINT);
+            $json = json_encode($this->data, JSON_PRETTY_PRINT);
+            if ($json === false) {
+                // Handle JSON encoding errors
+                http_response_code(500);
+                echo json_encode(['error' => 'JSON encoding failed: ' . json_last_error_msg()]);
+                return;
+            }
+            echo $json;
         }
     }
 
